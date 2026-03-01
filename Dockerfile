@@ -1,14 +1,22 @@
-ARG GO_VERSION=1
-FROM golang:${GO_VERSION}-bookworm as builder
+### STAGE 1: Build ###
+FROM golang:1.24.13-alpine3.22 AS build
 
-WORKDIR /usr/src/app
-COPY go.mod go.sum ./
-RUN go mod download && go mod verify
+WORKDIR /app
+
+COPY go.mod ./
+COPY go.sum ./
+
+RUN go mod download
+
 COPY . .
-RUN go build -v -o /run-app .
 
+RUN go build -o /main
 
-FROM debian:bookworm
+### STAGE 2: Run ###
+FROM alpine:3.23.3
 
-COPY --from=builder /run-app /usr/local/bin/
-CMD ["run-app"]
+COPY --from=build /main ./main
+
+EXPOSE 80
+
+CMD [ "./main" ]
