@@ -22,7 +22,7 @@ func main() {
 		return c.String(http.StatusOK, "Hello, World!")
 	})
 
-	e.GET("/ping", func(c *echo.Context) error {
+	e.GET("ping", func(c *echo.Context) error {
 		return c.JSON(http.StatusOK, map[string]bool{"success": true})
 	})
 
