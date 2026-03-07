@@ -15,10 +15,15 @@ func main() {
 	helper.Logger.Infof("Activating: %s\n", config.App.Name)
 
 	e := echo.New()
+
 	e.Use(middleware.RequestLogger())
 
 	e.GET("/", func(c *echo.Context) error {
 		return c.String(http.StatusOK, "Hello, World!")
+	})
+
+	e.GET("/ping", func(c *echo.Context) error {
+		return c.JSON(http.StatusOK, map[string]bool{"success": true})
 	})
 
 	if err := e.Start(fmt.Sprintf("%s:%s", config.App.Host, config.App.Port)); err != nil {
