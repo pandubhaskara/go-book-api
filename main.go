@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"go-book-api/config"
 	"go-book-api/helper"
@@ -27,12 +28,13 @@ func main() {
 	})
 
 	e.POST("echo", func(c *echo.Context) error {
-		var rule map[any]any
-		if err := c.Bind(&rule); err != nil {
+		var body any
+
+		if err := json.NewDecoder(c.Request().Body).Decode(&body); err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 
-		return c.JSON(http.StatusOK, rule)
+		return c.JSON(http.StatusOK, body)
 	})
 
 	if err := e.Start(fmt.Sprintf("%s:%s", config.App.Host, config.App.Port)); err != nil {
