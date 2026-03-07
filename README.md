@@ -33,4 +33,8 @@ Initial Version
 
 - Add ping endpoint to check server is alive
 
+### v1.0.2
+
+- Add echo endpoint for return the input JSON
+
 (Pandu Bhaskara)
