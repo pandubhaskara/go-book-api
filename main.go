@@ -34,7 +34,7 @@ func main() {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 
-		return c.JSON(http.StatusOK, body)
+		return c.JSON(http.StatusOK, map[string]interface{}{"data": body})
 	})
 
 	if err := e.Start(fmt.Sprintf("%s:%s", config.App.Host, config.App.Port)); err != nil {
