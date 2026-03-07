@@ -1,10 +1,10 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"go-book-api/config"
 	"go-book-api/helper"
+	"io"
 	"net/http"
 	_ "time/tzdata"
 
@@ -28,13 +28,13 @@ func main() {
 	})
 
 	e.POST("echo", func(c *echo.Context) error {
-		var body any
+		body, err := io.ReadAll(c.Request().Body)
 
-		if err := json.NewDecoder(c.Request().Body).Decode(&body); err != nil {
+		if err != nil {
 			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 		}
 
-		return c.JSON(http.StatusOK, map[string]interface{}{"data": body})
+		return c.Blob(http.StatusOK, "application/json", body)
 	})
 
 	if err := e.Start(fmt.Sprintf("%s:%s", config.App.Host, config.App.Port)); err != nil {
