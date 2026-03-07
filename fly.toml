@@ -7,6 +7,8 @@ app = 'go-book-api'
 primary_region = 'sin'
 
 [build]
+  dockerfile = "Dockerfile"
+  ignorefile = ".dockerignore"
 
 [http_service]
   force_https = true
