@@ -16,6 +16,7 @@ RUN go build -o /main
 FROM alpine:3.23.3
 
 COPY --from=build /main ./main
+COPY --from=build /app/data ./data
 
 EXPOSE 80
 

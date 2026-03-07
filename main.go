@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"go-book-api/config"
 	"go-book-api/helper"
+	"go-book-api/router"
 	"io"
 	"net/http"
 	_ "time/tzdata"
@@ -16,6 +17,8 @@ func main() {
 	helper.Logger.Infof("Activating: %s\n", config.App.Name)
 
 	e := echo.New()
+
+	router.UseSubroute(e)
 
 	e.Use(middleware.RequestLogger())
 

@@ -1,14 +1,25 @@
 package router
 
 import (
-	"net/http"
+	"go-book-api/controller"
+	"go-book-api/service"
 
-	"github.com/gin-gonic/gin"
+	"github.com/labstack/echo/v5"
 )
 
-func Api(r *gin.Engine) {
-	api := r.Group("/api")
-	api.GET("/healthchecker", func(ctx *gin.Context) {
-		ctx.JSON(http.StatusOK, gin.H{"message": "Go Book API server running..."})
-	})
+var (
+	authController controller.AuthController = controller.AuthController{}
+	bookController controller.BookController = controller.BookController{}
+)
+
+func UseSubroute(e *echo.Echo) {
+	e.POST("/auth/token", authController.Token)
+
+	books := e.Group("/books", service.ValidateToken)
+
+	books.GET("", bookController.Index)
+	books.GET("/:id", bookController.Detail)
+	books.POST("", bookController.Create)
+	books.PUT("/:id", bookController.Update)
+	books.DELETE("/:id", bookController.Delete)
 }
