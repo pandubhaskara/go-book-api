@@ -26,6 +26,15 @@ func main() {
 		return c.JSON(http.StatusOK, map[string]bool{"success": true})
 	})
 
+	e.POST("echo", func(c *echo.Context) error {
+		var rule map[any]any
+		if err := c.Bind(&rule); err != nil {
+			return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
+		}
+
+		return c.JSON(http.StatusOK, rule)
+	})
+
 	if err := e.Start(fmt.Sprintf("%s:%s", config.App.Host, config.App.Port)); err != nil {
 		e.Logger.Error("failed to start server", "error", err)
 	}
